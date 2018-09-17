@@ -22,7 +22,7 @@ namespace StreamCompaction {
             // TODO
 			// Insert I
 			odata[0] = 0;
-			// Compute
+			// Compute the sums
 			for (int i = 1; i != n; ++i)
 			{
 				odata[i] = idata[i - 1] + odata[i - 1];
