@@ -60,7 +60,7 @@ namespace StreamCompaction {
          */
         int compactWithScan(int n, int *odata, const int *idata) {
 
-			bool* hasChanged = new bool[n];
+			int* hasChanged = new int[n];
 			int* sum = new int[n];
 
 			timer().startCpuTimer();
@@ -70,11 +70,11 @@ namespace StreamCompaction {
 			{
 				if (idata[i] == 0)
 				{
-					hasChanged[i] = false;
+					hasChanged[i] = NOT_MET;
 				}
 				else
 				{
-					hasChanged[i] = true;
+					hasChanged[i] = HAS_MET;
 				}
 			}
 
@@ -86,7 +86,7 @@ namespace StreamCompaction {
 			int remaining = 0;
 			for (int i = 0; i < n; ++i)
 			{
-				if (hasChanged[i])
+				if (hasChanged[i] == HAS_MET)
 				{
 					odata[sum[i]] = idata[i];
 					++remaining;

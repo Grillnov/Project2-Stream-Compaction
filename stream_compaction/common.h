@@ -130,3 +130,7 @@ namespace StreamCompaction {
 	    };
     }
 }
+
+// Used as a boolean function for elaborating if a certain element meets criterion
+// 0 for not met, 1 for met
+enum ElementAttribute { NOT_MET, HAS_MET };
