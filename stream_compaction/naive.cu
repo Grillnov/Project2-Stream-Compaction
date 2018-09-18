@@ -34,6 +34,13 @@ namespace StreamCompaction {
 			}
 		}
 
+		void swapBuffer(int*& ptr1, int*& ptr2)
+		{
+			int* temp = ptr1;
+			ptr1 = ptr2;
+			ptr2 = temp;
+		}
+
         /**
          * Performs prefix-sum (aka scan) on idata, storing the result into odata.
          */
@@ -64,14 +71,17 @@ namespace StreamCompaction {
 				int strideWidth = 1 << layerI;
 				streamCompactionNaive<<<gridLayout, blockLayout>>>(n, strideWidth, idataDev, odataDev);
 				
-				int* temp = idataDev;
-				idataDev = odataDev;
-				odataDev = temp;
+				swapBuffer(idataDev, odataDev);
 			}
+			swapBuffer(idataDev, odataDev);
             timer().endGpuTimer();
 
-			cudaMemcpy(odata, reinterpret_cast<void*>(odataDev), heapSize, cudaMemcpyDeviceToHost);
+			cudaMemcpy(odata + 1, reinterpret_cast<void*>(odataDev), heapSize - sizeof(int), cudaMemcpyDeviceToHost);
+			odata[0] = 0;
 			checkCUDAError("Memcpy output data device 2 host failed");
+
+			cudaFree(idataDev);
+			cudaFree(odataDev);
         }
     }
 }
