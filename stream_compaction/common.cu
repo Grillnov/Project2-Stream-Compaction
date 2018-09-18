@@ -1,7 +1,5 @@
 #include "common.h"
 
-# define MEETCRITERION 0
-
 void checkCUDAErrorFn(const char *msg, const char *file, int line) {
     cudaError_t err = cudaGetLastError();
     if (cudaSuccess == err) {

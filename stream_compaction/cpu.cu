@@ -68,13 +68,13 @@ namespace StreamCompaction {
 			
 			for (int i = 0; i != n; ++i)
 			{
-				if (idata[i] == 0)
+				if (idata[i] == MEETCRITERION)
 				{
-					hasChanged[i] = NOT_MET;
+					hasChanged[i] = HAS_MET;
 				}
 				else
 				{
-					hasChanged[i] = HAS_MET;
+					hasChanged[i] = NOT_MET;
 				}
 			}
 
@@ -86,7 +86,7 @@ namespace StreamCompaction {
 			int remaining = 0;
 			for (int i = 0; i < n; ++i)
 			{
-				if (hasChanged[i] == HAS_MET)
+				if (hasChanged[i] == NOT_MET)
 				{
 					odata[sum[i]] = idata[i];
 					++remaining;
