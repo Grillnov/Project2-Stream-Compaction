@@ -32,14 +32,13 @@ namespace StreamCompaction {
 				return;
 			}
 
-			int &flag = bools[idx];
 			if (idata[idx] == MEETCRITERION)
 			{
-				flag = HAS_MET;
+				bools[idx] = HAS_MET;
 			}
 			else
 			{
-				flag = NOT_MET;
+				bools[idx] = NOT_MET;
 			}
         }
 
