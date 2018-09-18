@@ -78,10 +78,10 @@ namespace StreamCompaction {
 				}
 			}
 
-			odata[0] = 0;
+			sum[0] = 0;
 			for (int i = 1; i != n; ++i)
 			{
-				odata[i] = idata[i - 1] + odata[i - 1];
+				sum[i] = hasChanged[i - 1] + sum[i - 1];
 			}
 			int remaining = 0;
 			for (int i = 0; i < n; ++i)

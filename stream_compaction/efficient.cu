@@ -65,13 +65,13 @@ namespace StreamCompaction {
 			int layer = ilog2ceil(n);
 			int elementNumber = 0;
 
-			if (!isPowerOfTwo(n))
+			if (isPowerOfTwo(n))
 			{
-				elementNumber = 1 << layer;
+				elementNumber = n;
 			}
 			else
 			{
-				elementNumber = n;
+				elementNumber = 1 << layer;
 			}
 			int *paddedInput = new int[elementNumber];
 			//Copy and pad the redundant elements with 0, if any
@@ -100,18 +100,18 @@ namespace StreamCompaction {
 			dim3 gridLayout((n - 1 + BLOCKSIZE) / BLOCKSIZE);
 			dim3 blockLayout(BLOCKSIZE);
 
-			for (int layerI = 0; layerI < layer; ++layerI)
+			for (int layerI = 0; layerI < layer - 1; ++layerI)
 			{
 				int stride = 1 << layerI;
-				upSweeping<<<gridLayout, blockLayout>>>(n, stride, paddedIDataDev);
+				upSweeping<<<gridLayout, blockLayout>>>(elementNumber, stride, paddedIDataDev);
 			}
 			int initialZero = 0;
-			cudaMemcpy(reinterpret_cast<void*>(paddedIDataDev + n - 1), &initialZero, sizeof(int), cudaMemcpyHostToDevice);
+			cudaMemcpy(reinterpret_cast<void*>(paddedIDataDev + elementNumber - 1), &initialZero, sizeof(int), cudaMemcpyHostToDevice);
 			checkCUDAError("Memcpy for the initial 0 failed from host to device");
 			for (int layerI = layer - 1; layerI >= 0; --layerI)
 			{
 				int stride = 1 << layerI;
-				downSweeping<<<gridLayout, blockLayout>>>(n, stride, paddedIDataDev);
+				downSweeping<<<gridLayout, blockLayout>>>(elementNumber, stride, paddedIDataDev);
 			}
 
             timer().endGpuTimer();
@@ -131,7 +131,6 @@ namespace StreamCompaction {
          * @returns      The number of elements remaining after compaction.
          */
         int compact(int n, int *odata, const int *idata) {
-            timer().startGpuTimer();
 			int layer = ilog2ceil(n);
 			int elementNumber = 0;
 
