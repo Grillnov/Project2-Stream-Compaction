@@ -25,7 +25,6 @@ namespace StreamCompaction {
 			if (idx >= stride)
 			{
 				odata[idx] = idata[idx - stride] + idata[idx];
-				
 			}
 			// Got no element to add 
 			else
