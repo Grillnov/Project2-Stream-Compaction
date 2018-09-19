@@ -10,11 +10,40 @@ CUDA Stream Compaction
   * [Steam](https://steamcommunity.com/id/grillnov)
 * Tested on: Windows 10 x64, i7-6800K @ 3.40GHz 32GB, GTX 1080 8GB (Personal computer at home)
 
-**Description
+**Description**
 
 Stream compaction from scratch. In our case, we're to filter out all the elements that equals to 0. Analogly it's the dead paths in the list of all the rays.
 
-**Performance Test
+*Part 1: CPU implementation*
+*Part 2: Brute force naive reduction on GPU*
+*Part 3: Efficient implementation that's actually not so efficient*
+*Part 4: Thrust*
+
+**Performance Test**
+
+**Scan**
+
+*When element number is exactly 2-power*
+![](img/2Power.png)
+
+*When element number is not exactly 2-powered*
+![](images/n2power.png)
+
+**Compaction**
+
+*When element number is exactly 2-powered*
+![](images/compact2Power.png)
+
+*When element number is not exactly 2-powered*
+![](images/compactn2power.png)
+
+**Thrust implementation**
+
+*When element number is exactly 2-powered*
+![](images/thrust2power.png)
+
+*When element number is not exactly 2-powered*
+![](images/thrustn2power.png
 
 **The results
 
