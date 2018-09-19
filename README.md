@@ -19,31 +19,41 @@ Stream compaction from scratch. In our case, we're to filter out all the element
 *Part 3: Efficient implementation that's actually not so efficient*
 *Part 4: Thrust*
 
+**Issues**
+
+Just as always, I modified the `sm_20` option to `sm_60` to make it compile on nvcc 9.2.
+
 **Performance Test**
 
 **Scan**
 
 *When element number is exactly 2-power*
+
 ![](img/2Power.png)
 
 *When element number is not exactly 2-powered*
+
 ![](img/n2power.png)
 
 **Compaction**
 
 *When element number is exactly 2-powered*
+
 ![](img/compact2Power.png)
 
 *When element number is not exactly 2-powered*
+
 ![](img/compactn2power.png)
 
 **Thrust implementation**
 
 *When element number is exactly 2-powered*
+
 ![](img/thrust2power.png)
 
 *When element number is not exactly 2-powered*
-![](img/thrustn2power.png
+
+![](img/thrustn2power.png)
 
 **The results
 
@@ -101,3 +111,17 @@ Stream compaction from scratch. In our case, we're to filter out all the element
    elapsed time: 0.238592ms    (CUDA Measured)
     passed
 ```
+
+**The explanation for the efficiency of the efficient implementation**
+
+From the charts we find the surprising fact that, *efficient* implementation is actually not that efficient.
+2 main reasons for this to happen:
+
+**I/O intensive**
+In our efficient implementation, we have to write the initial element to the GPU buffer or read the last element of the buffer back. This causes lots of system interrupts and therefore is harmful to performance.
+
+**The reduce algorithm itself**
+With the layer going even deeper, stride becomes larger and larger, which, is a behavior that all caches hate. The spatial locality is horrible when the layer goes deep.
+
+**Something wrong with the thread scheduling**
+With the layer going deeper, more and more threads become idle and does nothing useful, and even worse, with the stride growing larger, branch divergence inside warps is getting unacceptable.
