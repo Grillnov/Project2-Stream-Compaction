@@ -27,23 +27,23 @@ Stream compaction from scratch. In our case, we're to filter out all the element
 ![](img/2Power.png)
 
 *When element number is not exactly 2-powered*
-![](images/n2power.png)
+![](img/n2power.png)
 
 **Compaction**
 
 *When element number is exactly 2-powered*
-![](images/compact2Power.png)
+![](img/compact2Power.png)
 
 *When element number is not exactly 2-powered*
-![](images/compactn2power.png)
+![](img/compactn2power.png)
 
 **Thrust implementation**
 
 *When element number is exactly 2-powered*
-![](images/thrust2power.png)
+![](img/thrust2power.png)
 
 *When element number is not exactly 2-powered*
-![](images/thrustn2power.png
+![](img/thrustn2power.png
 
 **The results
 
